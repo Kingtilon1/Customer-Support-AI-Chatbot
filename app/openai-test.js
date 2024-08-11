@@ -9,7 +9,7 @@ async function main() {
   });
 
   console.log(completion.choices[0]);
-  console.log("iujebk")
+  console.log(heyy)
 }
 
 main();
