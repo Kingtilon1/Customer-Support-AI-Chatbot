@@ -1,10 +1,11 @@
+'use client';
 import { Box, Container, Button, Stack } from "@mui/material";
-import OpenAI from "openai";
 import { useState } from "react";
 
 export default function Home() {
 const [input, setInput] = useState('')
-const openai = new OpenAI();
+const OpenAI = require("openai");
+
 const systemPrompt =  "You are a real estate agent assistant who provides detailed property insights and market analysis."
 const messages = async function() {
   const completion = await openai.chat.completions.create({
