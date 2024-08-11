@@ -7,7 +7,6 @@ async function main() {
     messages: [{ role: "system", content: "You are a helpful assistant." }],
     model: "gpt-4o-mini",
   });
-  console.log("kjferbnw")
   console.log(completion.choices[0]);
 }
 
