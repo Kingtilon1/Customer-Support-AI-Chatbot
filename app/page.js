@@ -6,19 +6,19 @@ import { useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
 
 export default function Home() {
-  // const [input, setInput] = useState("");
-  // const openai = new OpenAI();
+  const [input, setInput] = useState("");
+  const OpenAI = require("openai");
   const [userMessage, setUserMessage] = useState("");
-  // const systemPrompt =
-  //   "You are a real estate agent assistant who provides detailed property insights and market analysis.";
-  // const messages = async function () {
-  //   const completion = await openai.chat.completions.create({
-  //     messages: [{ role: "system", content: systemPrompt }],
-  //     model: "gpt-4o-mini",
-  //   });
+  const systemPrompt =
+    "You are a real estate agent assistant who provides detailed property insights and market analysis.";
+  const messages = async function () {
+    const completion = await openai.chat.completions.create({
+      messages: [{ role: "system", content: systemPrompt }],
+      model: "gpt-4o-mini",
+    });
 
-  //   console.log(completion.choices[0]);
-  // };
+    console.log(completion.choices[0]);
+  };
 
   return (
     <Box
