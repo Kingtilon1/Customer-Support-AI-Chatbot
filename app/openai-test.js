@@ -1,6 +1,9 @@
-import OpenAI from "openai";
+'use client';
+const OpenAI = require("openai");
 
-const openai = new OpenAI();
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+console.log(process.env.OPENAI_API_KEY);
 
 async function main() {
   const completion = await openai.chat.completions.create({
