@@ -1,25 +1,31 @@
-'use client';
-import { Box, Container, Button, Stack } from "@mui/material";
+"use client";
+import { Box, Container, Button, Stack, Input } from "@mui/material";
 import { useState } from "react";
 
 export default function Home() {
-const [input, setInput] = useState('')
-const OpenAI = require("openai");
+  const [input, setInput] = useState("");
+  const [message, setMessage] = useState("");
 
-const systemPrompt =  "You are a real estate agent assistant who provides detailed property insights and market analysis."
-const messages = async function() {
-  const completion = await openai.chat.completions.create({
-    messages: [{ role: "system", content: systemPrompt}],
-    model: "gpt-4o-mini",
-  });
+  const handleInputChange = (e) => {
+    setMessage(e.target.value);
+  };
+ 
 
-  console.log(completion.choices[0]);
-}
-
+  const handleSendMessage = async () =>{
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message }),
+    });
+    const data = await response.json();
+    console.log('Server response:', data.reply)
+  }
   return (
     <Box
       width="100vw"
-      height="100vh"
+      height="90vh"
       display="flex"
       flexDirection="column"
       justifyContent="center"
@@ -33,18 +39,22 @@ const messages = async function() {
         p={2}
         spacing={3}
       >
-  <Stack
-          direction={'column'}
+        <Stack
+          direction={"column"}
           spacing={2}
           flexGrow={1}
           overflow="auto"
           maxHeight="100%"
-          >
-            hjb
-          </Stack>
-
+        >
+          <Input
+            type="text"
+            value={message}
+            onChange={handleInputChange}
+            placeholder={"Type your message here..."}
+          />
+          <Button onClick={handleSendMessage}>click me</Button>
+        </Stack>
       </Stack>
-
     </Box>
   );
 }
