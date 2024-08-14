@@ -12,16 +12,25 @@ export default function Home() {
   };
  
 
-  const handleSendMessage = async () =>{
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message }),
-    });
-    const data = await response.json();
-    console.log('Server response:', data.reply)
+  const handleSendMessage = async () => {
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+      console.log('Server response:', data.reply);
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
   }
   return (
     <Box
