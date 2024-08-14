@@ -1,6 +1,7 @@
 "use client";
-import { Box, Container, Button, Stack, Input } from "@mui/material";
+import { Box, Container, Button, Stack, Input, TextField } from "@mui/material";
 import { useState } from "react";
+import SendIcon from "@mui/icons-material/Send";
 
 export default function Home() {
   const [input, setInput] = useState("");
@@ -34,10 +35,12 @@ export default function Home() {
       <Stack
         direction={"column"}
         width="500px"
-        height="700px"
-        border="1px solid black"
+        height="600px"
+        border="3px solid black"
         p={2}
         spacing={3}
+        boxShadow={20}
+        sx={{ borderRadius: "15px" }}
       >
         <Stack
           direction={"column"}
@@ -46,13 +49,22 @@ export default function Home() {
           overflow="auto"
           maxHeight="100%"
         >
-          <Input
+          Pete
+        </Stack>
+        <Stack flexDirection="row">
+          <TextField
             type="text"
             value={message}
             onChange={handleInputChange}
             placeholder={"Type your message here..."}
+            id="outlined-basic"
+            label="Send Message"
+            variant="outlined"
+            sx={{ width: "400px" }}
           />
-          <Button onClick={handleSendMessage}>click me</Button>
+          <Button onClick={handleSendMessage}>
+            <SendIcon fontSize="large" />
+          </Button>
         </Stack>
       </Stack>
     </Box>
