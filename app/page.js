@@ -15,12 +15,26 @@ import "./globals.css";
 export default function Home() {
   const [message, setMessage] = useState("");
   const [response, setResponse] = useState("");
+  const [chatHistory, setChatHistory] = useState([
+    {
+      role: "model",
+      content: "Hi! I'm the real estate assistant. How can I help you today?",
+    },
+  ]);
 
   const handleInputChange = (e) => {
     setMessage(e.target.value);
   };
 
   const handleSendMessage = async () => {
+    if (!message.trim()) return; // Avoid sending empty messages
+
+    // Update the chat history to show the user's message
+    setChatHistory((prevHistory) => [
+      ...prevHistory,
+      { role: "user", content: message },
+    ]);
+
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -29,29 +43,30 @@ export default function Home() {
         },
         body: JSON.stringify({ message }),
       });
-  
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-  
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-  
-      let fullResponse = ''; 
-  
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-  
-        const chunkText = decoder.decode(value, { stream: true });
-        fullResponse += chunkText; 
-        setResponse(prev => prev + chunkText); 
-      }
-  
-      setResponse(prev => prev + "\n[End of response]"); 
-  
+
+      const data = await response.json();
+
+      // Update the chat history to show the AI's response
+      setChatHistory((prevHistory) => [
+        ...prevHistory,
+        { role: "model", content: data.reply },
+      ]);
+
+      // Clear the input field
+      setMessage("");
     } catch (error) {
       console.error("Error:", error.message);
+      setChatHistory((prevHistory) => [
+        ...prevHistory,
+        {
+          role: "model",
+          content: "I'm sorry, but I encountered an error. Please try again later.",
+        },
+      ]);
     }
   };
   return (
@@ -78,6 +93,7 @@ export default function Home() {
         boxShadow={20}
         sx={{ borderRadius: "15px", backgroundColor: "white" }}
       >
+        {/* Display chat history */}
         <Stack
           direction={"column"}
           spacing={2}
@@ -85,34 +101,35 @@ export default function Home() {
           overflow="auto"
           maxHeight="100%"
         >
-          {/* Working on the text bubble for chat */}
-          <Box
-            sx={{
-              backgroundColor: "#20b2aa",
-              borderRadius: "10px",
-              padding: "10px",
-              marginRight: "10px",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <Typography variant="h4">{response}</Typography>
-          </Box>
+          {chatHistory.map((message, index) => (
+            <Box
+              key={index}
+              display="flex"
+              justifyContent={
+                message.role === "user" ? "flex-end" : "flex-start"
+              }
+            >
+              <Box
+                bgcolor={message.role === "user" ? "secondary.main" : "primary.main"}
+                color="white"
+                borderRadius={16}
+                p={3}
+              >
+                <Typography variant="body1">{message.content}</Typography>
+              </Box>
+            </Box>
+          ))}
         </Stack>
-        <Stack flexDirection="row">
+
+        {/* Input area */}
+        <Stack direction={"row"} spacing={2}>
           <TextField
-            type="text"
+            label="Message"
+            fullWidth
             value={message}
             onChange={handleInputChange}
-            placeholder={"Type your message here..."}
-            id="outlined-basic"
-            label="Send Message"
-            variant="outlined"
-            sx={{
-              width: { xs: "100%", sm: "80%", md: "400px" },
-            }}
           />
-          <Button onClick={handleSendMessage}>
+          <Button variant="contained" onClick={handleSendMessage}>
             <SendIcon fontSize="large" />
           </Button>
         </Stack>
