@@ -1,56 +1,69 @@
 "use client";
-import { Box, Container, Button, Stack, Input, TextField } from "@mui/material";
+import {
+  Box,
+  Container,
+  Button,
+  Stack,
+  Input,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
+import "./globals.css";
 
 export default function Home() {
   const [message, setMessage] = useState("");
-  const [responses, setResponse] = useState("")
+  const [responses, setResponse] = useState("");
 
   const handleInputChange = (e) => {
     setMessage(e.target.value);
   };
- 
 
   const handleSendMessage = async () => {
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
+      const response = await fetch("/api/chat", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ message }),
       });
-  
+
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
-  
+
       const data = await response.json();
-      console.log('Server response:', data.reply);
-      setResponse(data.reply)
+      console.log("Server response:", data.reply);
+      setResponse(data.reply);
     } catch (error) {
-      console.error('Error:', error.message);
+      console.error("Error:", error.message);
     }
-  }
+  };
   return (
     <Box
       width="100vw"
-      height="90vh"
+      height="100vh"
       display="flex"
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
+      sx={{
+        px: { xs: 2, sm: 4 },
+        py: { xs: 2, sm: 4 },
+        backgroundColor: "#e1e0df",
+      }}
     >
       <Stack
         direction={"column"}
-        width="500px"
-        height="600px"
+        width={{ xs: "90%", sm: "70%", md: "50%", lg: "500px" }}
+        height={{ xs: "80%", sm: "70%", md: "600px" }}
         border="3px solid black"
-        p={2}
+        p={{ xs: 1, sm: 2 }}
         spacing={3}
         boxShadow={20}
-        sx={{ borderRadius: "15px" }}
+        sx={{ borderRadius: "15px", backgroundColor: "white" }}
       >
         <Stack
           direction={"column"}
@@ -59,7 +72,19 @@ export default function Home() {
           overflow="auto"
           maxHeight="100%"
         >
-          <Box>{responses}</Box>
+          {/* Working on the text bubble for chat */}
+          <Box
+            sx={{
+              backgroundColor: "#20b2aa",
+              borderRadius: "10px",
+              padding: "10px",
+              marginRight: "10px",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Typography variant="h4">{responses}</Typography>
+          </Box>
         </Stack>
         <Stack flexDirection="row">
           <TextField
@@ -70,7 +95,9 @@ export default function Home() {
             id="outlined-basic"
             label="Send Message"
             variant="outlined"
-            sx={{ width: "400px" }}
+            sx={{
+              width: { xs: "100%", sm: "80%", md: "400px" },
+            }}
           />
           <Button onClick={handleSendMessage}>
             <SendIcon fontSize="large" />
