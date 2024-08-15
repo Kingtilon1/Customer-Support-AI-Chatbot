@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-require('dotenv').config();
+require("dotenv").config();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const apiKey = process.env.API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey);
@@ -10,14 +10,15 @@ let chatHistory = [];
 
 export async function POST(request) {
   const { message } = await request.json();
-  console.log('Received text: ', message);
+  console.log("Received text: ", message);
 
   // Add the user's message to the chat history
   chatHistory.push({ role: "user", parts: [{ text: message }] });
 
   const model = genAI.getGenerativeModel({
     model: "gemini-1.5-flash",
-    systemInstruction: "You are a real estate agent assistant who provides detailed property insights and market analysis.",
+    systemInstruction:
+      "You are a real estate agent assistant who provides detailed property insights and market analysis.",
   });
 
   try {
@@ -35,9 +36,11 @@ export async function POST(request) {
 
     // Return the full response
     return NextResponse.json({ reply });
-
   } catch (error) {
-    console.error('Error with Gemini API:', error);
-    return NextResponse.json({ error: 'Failed to generate text from Gemini' }, { status: 500 });
+    console.error("Error with Gemini API:", error);
+    return NextResponse.json(
+      { error: "Failed to generate text from Gemini" },
+      { status: 500 }
+    );
   }
 }

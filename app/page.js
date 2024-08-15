@@ -11,6 +11,7 @@ import {
 import { useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import "./globals.css";
+import Image from "next/image";
 
 export default function Home() {
   const [message, setMessage] = useState("");
@@ -64,7 +65,8 @@ export default function Home() {
         ...prevHistory,
         {
           role: "model",
-          content: "I'm sorry, but I encountered an error. Please try again later.",
+          content:
+            "I'm sorry, but I encountered an error. Please try again later.",
         },
       ]);
     }
@@ -101,6 +103,8 @@ export default function Home() {
           overflow="auto"
           maxHeight="100%"
         >
+          {/* Working on the text bubble for chat */}
+
           {chatHistory.map((message, index) => (
             <Box
               key={index}
@@ -108,15 +112,37 @@ export default function Home() {
               justifyContent={
                 message.role === "user" ? "flex-end" : "flex-start"
               }
+              mb={2} // Adds margin between messages
             >
-              <Box
-                bgcolor={message.role === "user" ? "secondary.main" : "primary.main"}
-                color="white"
-                borderRadius={16}
-                p={3}
-              >
-                <Typography variant="body1">{message.content}</Typography>
-              </Box>
+              {message.role === "user" ? (
+                <Box
+                  sx={{
+                    backgroundColor: "#20b2aa",
+                    borderRadius: "15px",
+                    padding: "15px",
+                    marginRight: "5px",
+                    display: "inline-block",
+                    maxWidth: "75%",
+                    alignSelf: "flex-end", // Aligns to the right
+                  }}
+                >
+                  <Typography variant="h4">{message.content}</Typography>
+                </Box>
+              ) : (
+                <Box
+                  sx={{
+                    backgroundColor: "#f0f0f0",
+                    borderRadius: "15px",
+                    padding: "15px",
+                    marginLeft: "5px",
+                    display: "inline-block",
+                    maxWidth: "75%",
+                    alignSelf: "flex-start", // Aligns to the left
+                  }}
+                >
+                  <Typography variant="h4">{message.content}</Typography>
+                </Box>
+              )}
             </Box>
           ))}
         </Stack>
