@@ -14,7 +14,7 @@ import "./globals.css";
 
 export default function Home() {
   const [message, setMessage] = useState("");
-  const [responses, setResponse] = useState("");
+  const [response, setResponse] = useState("");
 
   const handleInputChange = (e) => {
     setMessage(e.target.value);
@@ -29,14 +29,27 @@ export default function Home() {
         },
         body: JSON.stringify({ message }),
       });
-
+  
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
-      const data = await response.json();
-      console.log("Server response:", data.reply);
-      setResponse(data.reply);
+  
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+  
+      let fullResponse = ''; 
+  
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+  
+        const chunkText = decoder.decode(value, { stream: true });
+        fullResponse += chunkText; 
+        setResponse(prev => prev + chunkText); 
+      }
+  
+      setResponse(prev => prev + "\n[End of response]"); 
+  
     } catch (error) {
       console.error("Error:", error.message);
     }
@@ -83,7 +96,7 @@ export default function Home() {
               flexDirection: "column",
             }}
           >
-            <Typography variant="h4">{responses}</Typography>
+            <Typography variant="h4">{response}</Typography>
           </Box>
         </Stack>
         <Stack flexDirection="row">
