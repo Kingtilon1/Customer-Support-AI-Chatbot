@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 
 require('dotenv').config();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-
-const genAI = new GoogleGenerativeAI(process.env.GEMENI_KEY);
+const apiKey = process.env.API_KEY
+const genAI = new GoogleGenerativeAI(apiKey);
 
 
 
@@ -18,7 +18,6 @@ export async function POST(request){
   // retreive the response
   const result = await model.generateContent(message);
   const reply = await result.response.text();
-  console.log(reply)
-  return NextResponse.json(reply)
+  return NextResponse.json({reply})
 }
 

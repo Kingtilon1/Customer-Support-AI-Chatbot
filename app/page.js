@@ -4,8 +4,8 @@ import { useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
 
 export default function Home() {
-  const [input, setInput] = useState("");
   const [message, setMessage] = useState("");
+  const [responses, setResponse] = useState("")
 
   const handleInputChange = (e) => {
     setMessage(e.target.value);
@@ -28,6 +28,7 @@ export default function Home() {
   
       const data = await response.json();
       console.log('Server response:', data.reply);
+      setResponse(data.reply)
     } catch (error) {
       console.error('Error:', error.message);
     }
@@ -58,7 +59,7 @@ export default function Home() {
           overflow="auto"
           maxHeight="100%"
         >
-          Pete
+          <Box>{responses}</Box>
         </Stack>
         <Stack flexDirection="row">
           <TextField
