@@ -15,13 +15,27 @@ import Image from "next/image";
 
 export default function Home() {
   const [message, setMessage] = useState("");
-  const [responses, setResponse] = useState("");
+  const [response, setResponse] = useState("");
+  const [chatHistory, setChatHistory] = useState([
+    {
+      role: "model",
+      content: "Hi! I'm the real estate assistant. How can I help you today?",
+    },
+  ]);
 
   const handleInputChange = (e) => {
     setMessage(e.target.value);
   };
 
   const handleSendMessage = async () => {
+    if (!message.trim()) return; // Avoid sending empty messages
+
+    // Update the chat history to show the user's message
+    setChatHistory((prevHistory) => [
+      ...prevHistory,
+      { role: "user", content: message },
+    ]);
+
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -36,10 +50,25 @@ export default function Home() {
       }
 
       const data = await response.json();
-      console.log("Server response:", data.reply);
-      setResponse(data.reply);
+
+      // Update the chat history to show the AI's response
+      setChatHistory((prevHistory) => [
+        ...prevHistory,
+        { role: "model", content: data.reply },
+      ]);
+
+      // Clear the input field
+      setMessage("");
     } catch (error) {
       console.error("Error:", error.message);
+      setChatHistory((prevHistory) => [
+        ...prevHistory,
+        {
+          role: "model",
+          content:
+            "I'm sorry, but I encountered an error. Please try again later.",
+        },
+      ]);
     }
   };
   return (
@@ -66,6 +95,7 @@ export default function Home() {
         boxShadow={20}
         sx={{ borderRadius: "15px", backgroundColor: "white" }}
       >
+        {/* Display chat history */}
         <Stack
           direction={"column"}
           spacing={2}
@@ -74,47 +104,58 @@ export default function Home() {
           maxHeight="100%"
         >
           {/* Working on the text bubble for chat */}
-          <Box
-            sx={{
-              backgroundColor: "#20b2aa",
-              borderRadius: "15px",
-              padding: "15px",
-              marginRight: "5px",
-              display: "inline-block",
-              maxWidth: "75%",
-              alignSelf: "flex-start",
-            }}
-          >
-            <Typography variant="h4">{message}</Typography>
-          </Box>
-          <Box
-            sx={{
-              backgroundColor: "#f0f0f0",
-              borderRadius: "15px",
-              padding: "15px",
-              marginLeft: "5px",
-              display: "inline-block",
-              maxWidth: "75%",
-              alignSelf: "flex-end",
-            }}
-          >
-            <Typography variant="h4">{responses}</Typography>
-          </Box>
+
+          {chatHistory.map((message, index) => (
+            <Box
+              key={index}
+              display="flex"
+              justifyContent={
+                message.role === "user" ? "flex-end" : "flex-start"
+              }
+              mb={2} // Adds margin between messages
+            >
+              {message.role === "user" ? (
+                <Box
+                  sx={{
+                    backgroundColor: "#20b2aa",
+                    borderRadius: "15px",
+                    padding: "15px",
+                    marginRight: "5px",
+                    display: "inline-block",
+                    maxWidth: "75%",
+                    alignSelf: "flex-end", // Aligns to the right
+                  }}
+                >
+                  <Typography variant="h4">{message.content}</Typography>
+                </Box>
+              ) : (
+                <Box
+                  sx={{
+                    backgroundColor: "#f0f0f0",
+                    borderRadius: "15px",
+                    padding: "15px",
+                    marginLeft: "5px",
+                    display: "inline-block",
+                    maxWidth: "75%",
+                    alignSelf: "flex-start", // Aligns to the left
+                  }}
+                >
+                  <Typography variant="h4">{message.content}</Typography>
+                </Box>
+              )}
+            </Box>
+          ))}
         </Stack>
-        <Stack flexDirection="row">
+
+        {/* Input area */}
+        <Stack direction={"row"} spacing={2}>
           <TextField
-            type="text"
+            label="Message"
+            fullWidth
             value={message}
             onChange={handleInputChange}
-            placeholder={"Type your message here..."}
-            id="outlined-basic"
-            label="Send Message"
-            variant="outlined"
-            sx={{
-              width: { xs: "100%", sm: "80%", md: "400px" },
-            }}
           />
-          <Button onClick={handleSendMessage}>
+          <Button variant="contained" onClick={handleSendMessage}>
             <SendIcon fontSize="large" />
           </Button>
         </Stack>
