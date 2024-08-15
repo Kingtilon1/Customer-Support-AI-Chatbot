@@ -11,6 +11,7 @@ import {
 import { useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import "./globals.css";
+import Image from "next/image";
 
 export default function Home() {
   const [message, setMessage] = useState("");
@@ -76,11 +77,25 @@ export default function Home() {
           <Box
             sx={{
               backgroundColor: "#20b2aa",
-              borderRadius: "10px",
-              padding: "10px",
-              marginRight: "10px",
-              display: "flex",
-              flexDirection: "column",
+              borderRadius: "15px",
+              padding: "15px",
+              marginRight: "5px",
+              display: "inline-block",
+              maxWidth: "75%",
+              alignSelf: "flex-start",
+            }}
+          >
+            <Typography variant="h4">{message}</Typography>
+          </Box>
+          <Box
+            sx={{
+              backgroundColor: "#f0f0f0",
+              borderRadius: "15px",
+              padding: "15px",
+              marginLeft: "5px",
+              display: "inline-block",
+              maxWidth: "75%",
+              alignSelf: "flex-end",
             }}
           >
             <Typography variant="h4">{responses}</Typography>
