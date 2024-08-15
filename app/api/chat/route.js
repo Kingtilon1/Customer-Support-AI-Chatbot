@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-const OpenAI = require("openai");
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+require('dotenv').config();
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const apiKey = process.env.API_KEY
+const genAI = new GoogleGenerativeAI(apiKey);
 
 
 
@@ -12,14 +12,12 @@ export async function POST(request){
   console.log('Received text: ', message);
 
   // sending the users message to OpenAI
-  const completion = await openai.chat.completions.create({
-    messages: [{ role: "system", content: "You are a helpful assistant specialized in real estate." }, 
-      {role: "user", content: message}
-    ],
-    model: "gpt-4o-mini",
-  });
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash",
+    systemInstruction: "You are a real estate agent assistant who provides detailed property insights and market analysis.",
+   });
   // retreive the response
-  const reply = completion.choices[0].message.content;
+  const result = await model.generateContent(message);
+  const reply = await result.response.text();
   return NextResponse.json({reply})
 }
 

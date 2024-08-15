@@ -13,23 +13,33 @@ import SendIcon from "@mui/icons-material/Send";
 import "./globals.css";
 
 export default function Home() {
-  const [input, setInput] = useState("");
   const [message, setMessage] = useState("");
+  const [responses, setResponse] = useState("");
 
   const handleInputChange = (e) => {
     setMessage(e.target.value);
   };
 
   const handleSendMessage = async () => {
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message }),
-    });
-    const data = await response.json();
-    console.log("Server response:", data.reply);
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.log("Server response:", data.reply);
+      setResponse(data.reply);
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
   };
   return (
     <Box
@@ -73,7 +83,7 @@ export default function Home() {
               flexDirection: "column",
             }}
           >
-            <Typography variant="h4"></Typography>
+            <Typography variant="h4">{responses}</Typography>
           </Box>
         </Stack>
         <Stack flexDirection="row">
