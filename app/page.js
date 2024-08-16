@@ -92,44 +92,49 @@ export default function Home() {
       }}
     >
       {/* Navigation bar Finish Working on this*/}
-      <AppBar
-        position="static"
-        sx={{
-          backgroundColor: "#333",
-          height: "50px", // Adjust the height of the AppBar
-          mb: 2, // Add margin below the AppBar
-          mt: -1,
-          borderRadius: "10px",
-          width: { xs: "100%", sm: "80%", md: "80%", lg: "80%" },
-        }}
-      >
-        <Toolbar sx={{ minHeight: "30px" }}>
-          <Typography
-            variant="h7"
-            sx={{
-              flexGrow: 1,
-
-              textOverflow: "ellipsis", // Add ellipsis (...) if text overflows
-              whiteSpace: "nowrap", // Prevents the text from wrapping to the next line
-
-              lineHeight: "10px", // Align the text vertically within the AppBar
-            }}
-          >
-            Real Estate Chat Assistant
-          </Typography>
-        </Toolbar>
-      </AppBar>
 
       <Stack
         direction={"column"}
         width={{ xs: "90%", sm: "70%", md: "50%", lg: "500px" }}
         height={{ xs: "80%", sm: "70%", md: "600px" }}
         border="3px solid white"
+        borderTop={0}
         p={{ xs: 1, sm: 2 }}
+        pt={{ xs: 0, sm: 0 }}
         spacing={3}
         boxShadow={20}
         sx={{ borderRadius: "15px", backgroundColor: "white", mt: 2 }}
       >
+        <AppBar
+          position="static"
+          sx={{
+            position: "relative",
+            backgroundColor: "#333",
+            height: "50px", 
+            mb: 2, // Add margin below the AppBar
+            mt: -1,
+            borderTopLeftRadius: "10px", // Top-left corner radius
+            borderTopRightRadius: "10px",
+            width: "calc(100% + 35.5px)", // Extend width to account for 32px padding on both sides
+            left: "-17.9px",
+          }}
+        >
+          <Toolbar sx={{ minHeight: "30px" }}>
+            <Typography
+              variant="h7"
+              sx={{
+                flexGrow: 1,
+
+                textOverflow: "ellipsis", // Add ellipsis (...) if text overflows
+                whiteSpace: "nowrap", // Prevents the text from wrapping to the next line
+
+                lineHeight: "10px", // Align the text vertically within the AppBar
+              }}
+            >
+              Real Estate Chat Assistant
+            </Typography>
+          </Toolbar>
+        </AppBar>
         {/* Display chat history */}
         <Stack
           direction={"column"}
