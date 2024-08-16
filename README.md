@@ -19,6 +19,3 @@ This project was developed with collaboration from [MarleyWulf](https://github.c
 
 You can access the live demo of the chatbot [here](https://tilonmarlon.store/).
 
-## Contact
-
-For more information or inquiries, please reach out to [Tilon](bobbtilon@gmail.com).
