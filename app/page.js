@@ -7,6 +7,8 @@ import {
   Input,
   TextField,
   Typography,
+  AppBar,
+  Toolbar,
 } from "@mui/material";
 import { useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
@@ -81,19 +83,52 @@ export default function Home() {
       alignItems="center"
       sx={{
         px: { xs: 2, sm: 4 },
-        py: { xs: 2, sm: 4 },
-        backgroundColor: "#e1e0df",
+        py: { xs: 1, sm: 2 },
+        backgroundColor: "#6e4b9b",
+        backgroundImage: "url('/images/skyline.png')", // Background image
+        backgroundSize: "cover", // Adjust size to cover the whole container
+        backgroundRepeat: "no-repeat", // Prevents repeating the image
+        backgroundPosition: "center", // Centers the background image
       }}
     >
+      {/* Navigation bar Finish Working on this*/}
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor: "#333",
+          height: "50px", // Adjust the height of the AppBar
+          mb: 2, // Add margin below the AppBar
+          mt: -1,
+          borderRadius: "10px",
+          width: { xs: "100%", sm: "80%", md: "80%", lg: "80%" },
+        }}
+      >
+        <Toolbar sx={{ minHeight: "30px" }}>
+          <Typography
+            variant="h7"
+            sx={{
+              flexGrow: 1,
+
+              textOverflow: "ellipsis", // Add ellipsis (...) if text overflows
+              whiteSpace: "nowrap", // Prevents the text from wrapping to the next line
+
+              lineHeight: "10px", // Align the text vertically within the AppBar
+            }}
+          >
+            Real Estate Chat Assistant
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
       <Stack
         direction={"column"}
         width={{ xs: "90%", sm: "70%", md: "50%", lg: "500px" }}
         height={{ xs: "80%", sm: "70%", md: "600px" }}
-        border="3px solid black"
+        border="3px solid white"
         p={{ xs: 1, sm: 2 }}
         spacing={3}
         boxShadow={20}
-        sx={{ borderRadius: "15px", backgroundColor: "white" }}
+        sx={{ borderRadius: "15px", backgroundColor: "white", mt: 2 }}
       >
         {/* Display chat history */}
         <Stack
@@ -117,7 +152,7 @@ export default function Home() {
               {message.role === "user" ? (
                 <Box
                   sx={{
-                    backgroundColor: "#20b2aa",
+                    backgroundColor: "#9e379f",
                     borderRadius: "15px",
                     padding: "15px",
                     marginRight: "5px",
@@ -126,7 +161,7 @@ export default function Home() {
                     alignSelf: "flex-end", // Aligns to the right
                   }}
                 >
-                  <Typography variant="h4">{message.content}</Typography>
+                  <Typography variant="h6">{message.content}</Typography>
                 </Box>
               ) : (
                 <Box
@@ -140,7 +175,7 @@ export default function Home() {
                     alignSelf: "flex-start", // Aligns to the left
                   }}
                 >
-                  <Typography variant="h4">{message.content}</Typography>
+                  <Typography variant="h6">{message.content}</Typography>
                 </Box>
               )}
             </Box>
@@ -154,8 +189,19 @@ export default function Home() {
             fullWidth
             value={message}
             onChange={handleInputChange}
+            onKeyPress={(event) => {
+              // Added on key press event for enter key
+              if (event.key === "Enter") {
+                handleSendMessage();
+                setMessage("");
+              }
+            }}
           />
-          <Button variant="contained" onClick={handleSendMessage}>
+          <Button
+            variant="contained"
+            onClick={handleSendMessage}
+            color="secondary"
+          >
             <SendIcon fontSize="large" />
           </Button>
         </Stack>
