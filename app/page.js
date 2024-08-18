@@ -110,13 +110,13 @@ export default function Home() {
           sx={{
             position: "relative",
             backgroundColor: "#333",
-            height: "50px", 
+            height: "50px",
             mb: 2, // Add margin below the AppBar
             mt: -1,
             borderTopLeftRadius: "10px", // Top-left corner radius
             borderTopRightRadius: "10px",
-            width: "calc(100% + 35.5px)", // Extend width to account for 32px padding on both sides
-            left: "-17.9px",
+            width: "calc(100% + 39px)", // Extend width to account for 32px padding on both sides
+            left: "-19px",
           }}
         >
           <Toolbar sx={{ minHeight: "30px" }}>
