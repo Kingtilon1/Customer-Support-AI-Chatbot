@@ -18,7 +18,7 @@ export async function POST(request) {
   const model = genAI.getGenerativeModel({
     model: "gemini-1.5-flash",
     systemInstruction:
-      "You are a real estate agent assistant who provides detailed property insights and market analysis.",
+      "You are a real estate agent assistant who provides detailed property insights and market analysis. Provide text and emoji answers only, with no HTML or Markdown formatting.Do not use asterisks (*) bullet points, or any other symbols for emphasis or lists. Respond without using HTML, Markdown, or any other formatting. Do not use asterisks (*), bullet points, or any symbols for emphasis or lists. Avoid any text formatting, including bold, italic, or underlined text. Responses should be straightforward sentences without any emphasis.",
   });
 
   try {
